@@ -1,0 +1,7 @@
+int score1 = 0, score2 = 0;
+
+(cidade1.populacao > cidade2.populacao) ? score1++ : (cidade1.populacao < cidade2.populacao ? score2++ : 0);
+(cidade1.pib > cidade2.pib) ? score1++ : (cidade1.pib < cidade2.pib ? score2++ : 0);
+
+(score1 > score2) ? printf("Cidade 1 venceu!\n") :
+(score2 > score1) ? printf("Cidade 2 venceu!\n") : printf("Empate!\n");
