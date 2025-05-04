@@ -1,0 +1,93 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
+#include <string.h>
+
+#define TAM 8
+
+char tabuleiro[TAM][TAM];
+
+// Inicializa o tabuleiro com peças básicas
+void inicializarTabuleiro() {
+    for (int i = 0; i < TAM; i++)
+        for (int j = 0; j < TAM; j++)
+            tabuleiro[i][j] = '.';
+
+    tabuleiro[0][0] = 'T'; // Torre
+    tabuleiro[0][2] = 'B'; // Bispo
+    tabuleiro[0][1] = 'C'; // Cavalo
+    tabuleiro[1][0] = 'P'; // Peão
+}
+
+// Imprime o tabuleiro
+void imprimirTabuleiro() {
+    printf("\n  a b c d e f g h\n");
+    for (int i = 0; i < TAM; i++) {
+        printf("%d ", 8 - i);
+        for (int j = 0; j < TAM; j++) {
+            printf("%c ", tabuleiro[i][j]);
+        }
+        printf("\n");
+    }
+    printf("\n");
+}
+
+// Converte notação como "e2" para índices de matriz
+void converterPosicao(char *entrada, int *linha, int *coluna) {
+    *coluna = tolower(entrada[0]) - 'a';
+    *linha = 8 - (entrada[1] - '0');
+}
+
+// Valida movimentos simples por tipo de peça
+int movimentoValido(char peca, int li, int ci, int lf, int cf) {
+    int dx = abs(lf - li);
+    int dy = abs(cf - ci);
+
+    switch (peca) {
+        case 'T': return (dx == 0 || dy == 0); // Torre
+        case 'B': return (dx == dy);           // Bispo
+        case 'C': return (dx * dy == 2);       // Cavalo
+        case 'P': return (li - lf == 1 && ci == cf); // Peão simples (avança 1)
+        default: return 0;
+    }
+}
+
+// Tenta mover peça
+void moverPeca() {
+    char origem[3], destino[3];
+    int li, ci, lf, cf;
+
+    printf("Digite a posição de origem (ex: a2): ");
+    scanf("%2s", origem);
+    converterPosicao(origem, &li, &ci);
+
+    printf("Digite a posição de destino (ex: a3): ");
+    scanf("%2s", destino);
+    converterPosicao(destino, &lf, &cf);
+
+    char peca = tabuleiro[li][ci];
+
+    if (peca == '.') {
+        printf("Não há peça na origem.\n");
+        return;
+    }
+
+    if (movimentoValido(peca, li, ci, lf, cf)) {
+        tabuleiro[lf][cf] = peca;
+        tabuleiro[li][ci] = '.';
+        printf("Movimento realizado!\n");
+    } else {
+        printf("Movimento inválido para a peça %c.\n", peca);
+    }
+}
+
+int main() {
+    inicializarTabuleiro();
+
+    while (1) {
+        imprimirTabuleiro();
+        moverPeca();
+    }
+
+    return 0;
+}
