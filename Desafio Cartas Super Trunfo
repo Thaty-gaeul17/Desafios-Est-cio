@@ -1,0 +1,64 @@
+#include <stdio.h>
+#include <string.h>
+
+typedef struct {
+    char estado[3];
+    int codigo;
+    char nome[50];
+    int populacao;
+    double pib;
+    double area;
+    int pontos_turisticos;
+    double densidade_populacional;
+    double pib_per_capita;
+} CartaCidade;
+
+void calcularPropriedades(CartaCidade *cidade) {
+    cidade->densidade_populacional = cidade->populacao / cidade->area;
+    cidade->pib_per_capita = cidade->pib / cidade->populacao;
+}
+
+void imprimirCarta(CartaCidade cidade) {
+    printf("\n--- Carta da Cidade ---\n");
+    printf("Estado: %s\n", cidade.estado);
+    printf("Código: %d\n", cidade.codigo);
+    printf("Nome: %s\n", cidade.nome);
+    printf("População: %d\n", cidade.populacao);
+    printf("PIB: %.2f\n", cidade.pib);
+    printf("Área: %.2f km²\n", cidade.area);
+    printf("Pontos turísticos: %d\n", cidade.pontos_turisticos);
+    printf("Densidade Populacional: %.2f hab/km²\n", cidade.densidade_populacional);
+    printf("PIB per capita: %.2f\n", cidade.pib_per_capita);
+}
+
+int main() {
+    CartaCidade cidade;
+
+    printf("Digite o estado (sigla): ");
+    scanf("%2s", cidade.estado);
+
+    printf("Digite o código: ");
+    scanf("%d", &cidade.codigo);
+
+    printf("Digite o nome da cidade: ");
+    getchar(); // limpar o buffer
+    fgets(cidade.nome, sizeof(cidade.nome), stdin);
+    cidade.nome[strcspn(cidade.nome, "\n")] = '\0'; // remover \n
+
+    printf("Digite a população: ");
+    scanf("%d", &cidade.populacao);
+
+    printf("Digite o PIB: ");
+    scanf("%lf", &cidade.pib);
+
+    printf("Digite a área (em km²): ");
+    scanf("%lf", &cidade.area);
+
+    printf("Digite o número de pontos turísticos: ");
+    scanf("%d", &cidade.pontos_turisticos);
+
+    calcularPropriedades(&cidade);
+    imprimirCarta(cidade);
+
+    return 0;
+}
